@@ -35,11 +35,16 @@ ul{list-style:none;margin:0;padding:0;max-height:400px;overflow:auto}
 li{display:flex;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);font-size:15px}
 li span{color:var(--mute);font-size:12px;align-self:center}
 .empty{color:var(--mute);font-size:14px;padding:6px 0}
-dialog{border:0;border-radius:10px;padding:0;background:var(--panel);color:var(--text);width:min(420px,90vw);box-shadow:0 20px 60px rgba(0,0,0,.6)}
-dialog::backdrop{background:rgba(0,0,0,.6)}
-.dh{background:var(--accent);padding:14px 20px;font-weight:600}
-.dn{padding:28px 20px;font-size:38px;font-weight:700;text-align:center;overflow-wrap:anywhere}
-.df{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 16px}
+dialog{border:0;border-radius:6px;padding:0;background:#1f1f1f;color:var(--text);width:min(800px,92vw);box-shadow:0 10px 40px rgba(0,0,0,.7)}
+dialog::backdrop{background:rgba(0,0,0,.35)}
+.dh{background:#1b66b8;padding:20px 20px;font-weight:700;font-size:24px}
+.dn{padding:40px 20px 34px;font-size:clamp(34px,7vw,58px);font-weight:300;letter-spacing:.5px;text-align:center;overflow-wrap:anywhere}
+.df{display:flex;justify-content:flex-end;gap:6px;padding:0 10px 10px}
+.df .btn.ghost{background:none}
+.df .btn.ghost:hover{background:#333}
+#drem{background:#4a3fb5}
+#drem:hover{background:#5b4fd0}
+#confetti{position:fixed;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;background:transparent;pointer-events:none;overflow:hidden}
 #sec{position:fixed;right:max(10px,env(safe-area-inset-right,0px));bottom:max(10px,env(safe-area-inset-bottom,0px));width:18px;height:18px;padding:2px;background:none;border:0;color:#fff;opacity:.1;cursor:pointer;z-index:20}
 #sec:hover,#sec:focus-visible{opacity:.5}
 #sec svg{display:block;width:100%;height:100%;fill:currentColor}
@@ -83,16 +88,17 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 </main>
 
 <dialog id="dlg">
-  <div class="dh">Terpilih!</div>
+  <div class="dh">Kita punya pemenang!</div>
   <div class="dn" id="dname"></div>
   <div class="df">
     <button class="btn ghost" id="dclose">Tutup</button>
-    <button class="btn" id="drem">Hapus dari roda</button>
+    <button class="btn" id="drem">Hapus</button>
   </div>
 </dialog>
 
 <button id="sec" aria-label="Opsi" title=""><svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg></button>
 <div id="pop" hidden></div>
+<canvas id="confetti" popover="manual" aria-hidden="true"></canvas>
 
 <script>
 (function(){
@@ -115,8 +121,8 @@ function parse(){
 
 function fit(){
   var w=window.innerWidth,h=window.innerHeight;
-  var s=w<=860?w-40:w-460;
-  s=Math.max(280,Math.min(s,h-150,760));
+  var s=w<=860?w-24:w-420;
+  s=Math.max(300,Math.min(s,h-110,940));
   var d=window.devicePixelRatio||1;
   cv.style.width=cv.style.height=s+'px';
   cv.width=cv.height=Math.round(s*d);
@@ -124,7 +130,7 @@ function fit(){
 }
 
 function draw(){
-  var W=cv.width,c=W/2,R=c*0.88,n=names.length;
+  var W=cv.width,c=W/2,R=c*0.9,n=names.length;
   var k=W/parseFloat(cv.style.width||W);
   ctx.clearRect(0,0,W,W);
   ctx.save();
@@ -199,6 +205,7 @@ function win(i){
   renderRes();
   $('#dname').textContent=nm;
   $('#dlg').showModal();
+  confetti();
 }
 
 function renderRes(){
@@ -216,6 +223,53 @@ function renderRes(){
 function tab(n){
   $('#p1').hidden=n!==1;$('#p2').hidden=n!==2;
   $('#t1').setAttribute('aria-selected',n===1);$('#t2').setAttribute('aria-selected',n===2);
+}
+
+// confetti
+var cc=$('#confetti'),cx=cc.getContext('2d'),parts=[],cRun=false;
+var CC=['#1b66b8','#2a7fd8','#f2f2f2','#ff5a5f','#ffc233','#3ddc97','#a66cff','#ff8fab'];
+function burst(x,y,a,spread,n,speed){
+  for(var i=0;i<n;i++){
+    var ang=a+(Math.random()-0.5)*spread,v=speed*(0.35+Math.random()*0.65);
+    parts.push({x:x,y:y,vx:Math.cos(ang)*v,vy:Math.sin(ang)*v,r:Math.random()*TAU,vr:(Math.random()-0.5)*0.4,
+      fl:Math.random()*TAU,w:6+Math.random()*7,h:5+Math.random()*7,c:CC[Math.floor(Math.random()*CC.length)],
+      t:0,life:190+Math.random()*130});
+  }
+}
+function confetti(){
+  if(calm.matches)return;
+  var d=window.devicePixelRatio||1,W=window.innerWidth,H=window.innerHeight;
+  cc.width=Math.round(W*d);cc.height=Math.round(H*d);
+  try{if(!cc.matches(':popover-open'))cc.showPopover();}catch(e){cc.style.zIndex=99;}
+  var v=Math.max(14,H/34);
+  burst(W*0.05,H*0.95,-1.1,0.7,80,v*1.05);
+  burst(W*0.95,H*0.95,-Math.PI+1.1,0.7,80,v*1.05);
+  [250,550,850].forEach(function(ms){
+    setTimeout(function(){burst(W*(0.15+Math.random()*0.7),H*(0.2+Math.random()*0.25),0,TAU,45,v*0.55);},ms);
+  });
+  if(cRun)return;
+  cRun=true;
+  var last=performance.now();
+  function f(now){
+    var k=Math.min((now-last)/16.67,3);last=now;
+    cx.setTransform(d,0,0,d,0,0);cx.clearRect(0,0,W,H);
+    parts=parts.filter(function(p){return p.t<p.life&&p.y<H+30;});
+    parts.forEach(function(p){
+      p.t+=k;
+      var dr=Math.pow(0.985,k);
+      p.vx*=dr;p.vy=p.vy*dr+0.25*k;
+      p.x+=p.vx*k;p.y+=p.vy*k;p.r+=p.vr*k;p.fl+=0.15*k;
+      cx.save();
+      cx.globalAlpha=Math.max(0,Math.min(1,(p.life-p.t)/40));
+      cx.translate(p.x,p.y);cx.rotate(p.r);
+      cx.fillStyle=p.c;
+      cx.fillRect(-p.w/2,-p.h/2,p.w,Math.max(1.5,p.h*Math.abs(Math.cos(p.fl))));
+      cx.restore();
+    });
+    if(parts.length)requestAnimationFrame(f);
+    else{cRun=false;try{cc.hidePopover();}catch(e){}}
+  }
+  requestAnimationFrame(f);
 }
 
 // hidden selector
@@ -281,6 +335,17 @@ $('#fs').addEventListener('click',function(){
 });
 $('#title').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();this.blur();}});
 window.addEventListener('resize',fit);
+
+// putaran pelan saat idle
+var lastT=0,calm=window.matchMedia('(prefers-reduced-motion: reduce)');
+function idle(t){
+  var dt=Math.min(t-lastT,50);lastT=t;
+  if(!spinning&&names.length&&!$('#dlg').open&&!calm.matches){
+    rot=(rot+dt*0.0001)%TAU;draw();
+  }
+  requestAnimationFrame(idle);
+}
+requestAnimationFrame(idle);
 
 parse();fit();renderRes();
 })();
