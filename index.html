@@ -10,7 +10,14 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
 body{margin:0;min-height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));background:radial-gradient(1100px 700px at 25% 40%,var(--bg2),var(--bg) 70%);color:var(--text);font-family:Roboto,"Segoe UI",system-ui,sans-serif;color-scheme:dark}
 header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 20px;background:rgba(0,0,0,.45);border-bottom:1px solid #000}
-.brand{font-weight:700;font-size:20px;letter-spacing:.2px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px;letter-spacing:.2px;white-space:nowrap}
+.logo{width:34px;height:34px;border-radius:9px;flex:none;background:radial-gradient(circle,#fff 0 20%,transparent 21%),conic-gradient(#ffd54f,#ff9a5b,#ef6f91,#b57be0,#5b95ec,#4fcbe0,#74d68f,#ffd54f)}
+.nav{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;overflow:hidden}
+.mi{display:flex;align-items:center;gap:7px;padding:6px 12px;font-size:14px;font-weight:600;cursor:default;user-select:none;white-space:nowrap}
+.nav .hbtn{display:flex;align-items:center;padding:6px 12px}
+.ic{width:18px;height:18px;fill:currentColor;flex:none}
+@media(max-width:860px){.mi .t{display:none}.mi{padding:6px 7px}.brand{font-size:18px}}
+@media(max-width:560px){.mi{display:none}}
 .hbtn{background:none;border:0;color:var(--text);font:inherit;font-size:14px;font-weight:500;cursor:pointer;padding:6px 10px;border-radius:6px}
 .hbtn:hover{background:rgba(255,255,255,.08)}
 main{display:flex;flex-wrap:wrap;gap:16px;padding:12px 20px 28px;align-items:flex-start}
@@ -59,8 +66,18 @@ dialog::backdrop{background:rgba(0,0,0,.35)}
 </head>
 <body>
 <header>
-  <div class="brand">Spin Wheel</div>
-  <div><button class="hbtn" id="fs">Layar penuh</button></div>
+  <div class="brand"><span class="logo" aria-hidden="true"></span>Spin Wheel</div>
+  <nav class="nav">
+    <span class="mi"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3a9 9 0 100 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.3-.5-.8-.5-1.2 0-1.1.9-2 2-2H17a4 4 0 004-4c0-4.4-4-8-9-8zM6.5 12a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3-4a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm5 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm3 4a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/></svg><span class="t">Kustomisasi</span></span>
+    <span class="mi"><svg class="ic" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg><span class="t">Baru</span></span>
+    <span class="mi"><svg class="ic" viewBox="0 0 24 24"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg><span class="t">Buka</span></span>
+    <span class="mi"><svg class="ic" viewBox="0 0 24 24"><path d="M17 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16a3 3 0 110-6 3 3 0 010 6zm3-10H5V5h10v4z"/></svg><span class="t">Simpan</span></span>
+    <span class="mi"><svg class="ic" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8 11l8-5M8 13l8 5" stroke="currentColor" stroke-width="2" fill="none"/></svg><span class="t">Bagikan</span></span>
+    <span class="mi"><svg class="ic" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l6 6" stroke="currentColor" stroke-width="2.4"/></svg><span class="t">Galeri</span></span>
+    <button class="hbtn" id="fs" title="Layar penuh" aria-label="Layar penuh"><svg class="ic" viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4zM14 4h6v6h-2V6h-4zM4 14h2v4h4v2H4zM18 14h2v6h-6v-2h4z"/></svg></button>
+    <span class="mi"><span class="t">Lainnya</span><svg class="ic" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+    <span class="mi"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span class="t">Indonesia</span></span>
+  </nav>
 </header>
 <main>
   <section class="stage">
@@ -340,8 +357,8 @@ window.addEventListener('resize',fit);
 var lastT=0,calm=window.matchMedia('(prefers-reduced-motion: reduce)');
 function idle(t){
   var dt=Math.min(t-lastT,50);lastT=t;
-  if(!spinning&&names.length&&!$('#dlg').open&&!calm.matches){
-    rot=(rot+dt*0.0001)%TAU;draw();
+  if(!spinning&&names.length&&!$('#dlg').open){
+    rot=(rot+dt*0.00012)%TAU;draw();
   }
   requestAnimationFrame(idle);
 }
